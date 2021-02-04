@@ -10,10 +10,9 @@ import {
   ListHeaderStyles,
 } from './Styles';
 
-export default function ListHeader() {
+export default function ListHeader(props) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [guestList, setGuestList] = useState([]);
 
   const baseUrl = 'http://localhost:5000';
 
@@ -26,6 +25,8 @@ export default function ListHeader() {
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
     const createdGuest = await response.json();
+    const guestListTemp = [...props.guestList, createdGuest];
+    props.setGuestList(guestListTemp);
   }
 
   function filter() {}

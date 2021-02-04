@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 // List
 // - Edit first and last name
@@ -8,25 +8,25 @@ import { useEffect, useState } from 'react';
 // - Attending deadline
 // Delete all guest button
 
-export default function List() {
-  const [guestList, setGuestList] = useState([]);
+export default function List(props) {
+  //const [guestList, setGuestList] = useState([]);
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests() {
     const response = await fetch(`${baseUrl}/`);
     const allGuests = await response.json();
     console.log('in load guests: ', allGuests);
-    setGuestList(allGuests);
+    props.setGuestList(allGuests);
   }
 
   async function deleteAllGuests() {
-    console.log('Guest list: ', guestList);
+    console.log('Guest list: ', props.guestList);
     let response;
-    guestList.map(async (element, id) => {
+    props.guestList.map(async (element, id) => {
       response = await fetch(`${baseUrl}/${element.id}`, { method: 'DELETE' });
       const deletedGuest = await response.json();
     });
-    setGuestList([]);
+    props.setGuestList([]);
   }
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function List() {
             </tr>
           </thead>
           <tbody>
-            {guestList.map((element, id) => {
+            {props.guestList.map((element, id) => {
               return (
                 <tr key={element.id}>
                   <th>{element.firstName}</th>
