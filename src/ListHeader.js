@@ -11,25 +11,44 @@ import {
 } from './Styles';
 
 export default function ListHeader(props) {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-
+  const [checkedId, setCheckedId] = useState('all');
   const baseUrl = 'http://localhost:5000';
 
-  async function addUser() {
+  async function addGuest() {
     const response = await fetch(`${baseUrl}/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+      body: JSON.stringify({
+        firstName: props.firstName,
+        lastName: props.lastName,
+      }),
     });
     const createdGuest = await response.json();
     const guestListTemp = [...props.guestList, createdGuest];
     props.setGuestList(guestListTemp);
   }
 
-  function filter() {}
+  async function filter(filterid) {
+    if (filterid === 'all') {
+      props.setGuestList(await props.loadGuests(true));
+    } else if (filterid === 'attending') {
+      const onlyAttendingGuests = (await props.loadGuests(true)).filter(
+        (element) => {
+          return element.attending;
+        },
+      );
+      props.setGuestList(onlyAttendingGuests);
+    } else if (filterid === 'notAttending') {
+      const onlyAttendingGuests = (await props.loadGuests(true)).filter(
+        (element) => {
+          return !element.attending;
+        },
+      );
+      props.setGuestList(onlyAttendingGuests);
+    }
+  }
 
   return (
     <div css={ListHeaderStyles}>
@@ -43,39 +62,54 @@ export default function ListHeader(props) {
             <input
               type="text"
               id="firstName"
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => props.setFirstName(e.target.value)}
             />
           </label>
           <label htmlFor="lastName">
             <input
               type="text"
               id="lastName"
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(e) => props.setLastName(e.target.value)}
             />
           </label>
-          <button onClick={addUser}>Add Guest</button>
+          <button onClick={addGuest}>Add Guest</button>
         </div>
         <div>
           <p>Filters: </p>
           <fieldset id="radioFilters">
+            <input
+              type="radio"
+              value="All"
+              id="all"
+              name="Filter"
+              onChange={(e) => {
+                filter(e.target.id);
+              }}
+            />
             <label htmlFor="all">All </label>
-            <input type="radio" value="All" id="all" name="Filter" />
 
-            <label htmlFor="attending">Attending </label>
             <input
               type="radio"
               value="Attending"
               id="attending"
               name="Filter"
+              onChange={(e) => {
+                filter(e.target.id);
+                e.target.checked = true;
+              }}
             />
+            <label htmlFor="attending">Attending </label>
 
-            <label htmlFor="notAttending">Not attending </label>
             <input
               type="radio"
               value="Not attending"
               id="notAttending"
               name="Filter"
+              onChange={(e) => {
+                filter(e.target.id);
+              }}
             />
+            <label htmlFor="notAttending">Not attending </label>
           </fieldset>
         </div>
       </div>
