@@ -12,6 +12,7 @@ export default function List(props) {
   const [editable, setEditable] = useState(false);
   const [readOnly, setReadOnly] = useState(true);
   const [attending, setAttending] = useState();
+  const [attendingDeadline, setAttendingDeadline] = useState();
 
   async function deleteAllGuests() {
     console.log('Guest list: ', props.guestList);
@@ -138,7 +139,37 @@ export default function List(props) {
                       Delete
                     </button>
                   </th>
-                  <th></th>
+                  <th>
+                    {' '}
+                    <input
+                      id={'attendingDeadline' + element.id}
+                      readOnly={readOnly}
+                      defaultValue=""
+                      type="text"
+                      onChange={(e) => setAttendingDeadline(e.target.value)}
+                      onDoubleClick={(e) => {
+                        e.target.readOnly = false;
+                        setReadOnly(true);
+                        e.target.type = 'date';
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.target.readOnly = true;
+                          setReadOnly(true);
+                          const today = new Date();
+                          const enteredDate = new Date(
+                            e.target.value.slice(0, 4),
+                            Number(e.target.value.slice(5, 7)) - 1,
+                            Number(e.target.value.slice(8, 10)),
+                          );
+                          if (enteredDate >= today) {
+                            // Change checked to
+                            //updateGuest(true, element, 'attendingDate');
+                          }
+                        }
+                      }}
+                    />
+                  </th>
                 </tr>
               );
             })}
@@ -146,7 +177,7 @@ export default function List(props) {
         </table>
       </div>
       <div>
-        <button onClick={deleteAllGuests}>Delete all users</button>
+        <button onClick={deleteAllGuests}>Wipe guest list</button>
       </div>
     </div>
   );
