@@ -1,14 +1,53 @@
 /** @jsxImportSource @emotion/react */
+import { useEffect, useState } from 'react';
 import './App.css';
 import EventArea from './EventArea';
 import Sidebar from './Sidebar';
 import { AppStyles } from './Styles';
 
 function App() {
+  const [guestList, setGuestList] = useState([]);
+  const baseUrl = 'http://localhost:5000';
+
+  async function loadGuests(shouldReturn = false, id) {
+    console.log('id: ', id);
+    if (id) {
+      const response = await fetch(`${baseUrl}/allEventGuests?id=${id}`);
+      console.log('response: ', response);
+      const allGuests = await response.json();
+      console.log('in load guests: ', allGuests);
+
+      setGuestList(allGuests);
+
+      if (shouldReturn) {
+        return allGuests;
+      }
+    } else {
+      if (shouldReturn) {
+        return [];
+      }
+    }
+  }
+
+  useEffect(() => {
+    console.log('In useEffect in App.js');
+    loadGuests();
+  }, []);
+
   return (
     <div className="App" css={AppStyles}>
-      <Sidebar />
-      <EventArea />
+      <Sidebar
+        baseUrl={baseUrl}
+        setGuestList={setGuestList}
+        guestList={guestList}
+        loadGuests={loadGuests}
+      />
+      <EventArea
+        baseUrl={baseUrl}
+        setGuestList={setGuestList}
+        guestList={guestList}
+        loadGuests={loadGuests}
+      />
     </div>
   );
 }

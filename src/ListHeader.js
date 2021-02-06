@@ -12,10 +12,9 @@ import {
 
 export default function ListHeader(props) {
   const [checkedId, setCheckedId] = useState('all');
-  const baseUrl = 'http://localhost:5000';
 
   async function addGuest() {
-    const response = await fetch(`${baseUrl}/`, {
+    const response = await fetch(`${props.baseUrl}/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

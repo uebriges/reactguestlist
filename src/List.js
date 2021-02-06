@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // List
 // - Edit first and last name
@@ -28,10 +28,6 @@ export default function List(props) {
 
   async function deleteSingleGuest(id) {
     const filtered = await props.guestList.filter(async (element, index) => {
-      console.log('value.id === id: ', element.id === id);
-      console.log('value: ', element);
-      console.log('id: ', id);
-      console.log('index: ', index);
       if (element.id === id) {
         const response = await fetch(`${props.baseUrl}/${element.id}`, {
           method: 'DELETE',
@@ -65,10 +61,6 @@ export default function List(props) {
     });
     props.setGuestList(updatedGuestList);
   }
-
-  useEffect(() => {
-    props.loadGuests();
-  }, []);
 
   return (
     <div>
