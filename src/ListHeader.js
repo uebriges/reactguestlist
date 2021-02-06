@@ -14,12 +14,13 @@ export default function ListHeader(props) {
   const [checkedId, setCheckedId] = useState('all');
 
   async function addGuest() {
-    const response = await fetch(`${props.baseUrl}/`, {
+    const response = await fetch(`${props.baseUrl}/addNewGuestToEvent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        eventId: props.eventId,
         firstName: props.firstName,
         lastName: props.lastName,
       }),

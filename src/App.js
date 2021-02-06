@@ -7,6 +7,7 @@ import { AppStyles } from './Styles';
 
 function App() {
   const [guestList, setGuestList] = useState([]);
+  const [eventId, setEventId] = useState();
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests(shouldReturn = false, id) {
@@ -17,6 +18,7 @@ function App() {
       const allGuests = await response.json();
       console.log('in load guests: ', allGuests);
 
+      setEventId(id);
       setGuestList(allGuests);
 
       if (shouldReturn) {
@@ -41,12 +43,16 @@ function App() {
         setGuestList={setGuestList}
         guestList={guestList}
         loadGuests={loadGuests}
+        setEventId={setEventId}
+        eventId={eventId}
       />
       <EventArea
         baseUrl={baseUrl}
         setGuestList={setGuestList}
         guestList={guestList}
         loadGuests={loadGuests}
+        setEventId={setEventId}
+        eventId={eventId}
       />
     </div>
   );

@@ -22,6 +22,8 @@ export default function EventArea(props) {
           setLastName={setLastName}
           loadGuests={props.loadGuests}
           baseUrl={props.baseUrl}
+          setEventId={props.setEventId}
+          eventId={props.eventId}
         />
         <List
           guestList={props.guestList}

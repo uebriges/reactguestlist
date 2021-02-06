@@ -40,11 +40,6 @@ export default function Sidebar(props) {
   async function openGuestList(id) {
     console.log('id in openGuestList: ', id);
     props.loadGuests(false, id);
-    // const response = await fetch(`${props.baseUrl}/allEventGuests:${id}`);
-    // const allGuests = await response.json();
-    // console.log('in load guests: ', allGuests);
-
-    // props.setGuestList(allGuests);
   }
 
   useEffect(() => {
