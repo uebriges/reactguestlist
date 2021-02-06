@@ -27,28 +27,28 @@ export default function List(props) {
   }
 
   async function deleteSingleGuest(id) {
-    const filtered = await props.guestList.filter(async (value) => {
-      if (value.id === id) {
-        const response = await fetch(`${props.baseUrl}/${value.id}`, {
+    const filtered = await props.guestList.filter(async (element, index) => {
+      console.log('value.id === id: ', element.id === id);
+      console.log('value: ', element);
+      console.log('id: ', id);
+      console.log('index: ', index);
+      if (element.id === id) {
+        const response = await fetch(`${props.baseUrl}/${element.id}`, {
           method: 'DELETE',
         });
         const deletedGuest = await response.json();
         console.log('deleted guest: ', deletedGuest);
         return false;
+      } else {
+        return true;
       }
-      console.log('value.id', value.id);
-      console.log('id: ', id);
-      console.log('!(value.id === id)', !(value.id === id));
-      return true;
     });
     console.log('filtered: ', filtered);
     props.setGuestList(filtered);
   }
 
-  async function updateGuest(value, element, property) {
-    console.log(value);
-    console.log(element);
-    const response = await fetch(`${props.baseUrl}/${element.id}`, {
+  async function updateGuest(value, guestObject, property) {
+    const response = await fetch(`${props.baseUrl}/${guestObject.id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -76,6 +76,7 @@ export default function List(props) {
         <table>
           <thead>
             <tr>
+              <th>Id</th>
               <th>First name</th>
               <th>Last name</th>
               <th>Attending</th>
@@ -87,12 +88,16 @@ export default function List(props) {
             {props.guestList.map((element, id) => {
               return (
                 <tr id={element.id} key={element.id + 'key'}>
+                  <th>{element.id}</th>
                   <th>
                     <input
                       id={'firstName' + element.id}
                       readOnly={readOnly}
                       defaultValue={element.firstName}
-                      onChange={(e) => props.setFirstName(e.target.value)}
+                      onChange={(e) => {
+                        updateGuest(e.target.value, element, 'firstName');
+                        props.setFirstName(e.target.value);
+                      }}
                       onDoubleClick={(e) => {
                         e.target.readOnly = false;
                         setReadOnly(true);
@@ -110,7 +115,10 @@ export default function List(props) {
                       id={'lastName' + element.id}
                       readOnly={readOnly}
                       defaultValue={element.lastName}
-                      onChange={(e) => props.setLastName(e.target.value)}
+                      onChange={(e) => {
+                        updateGuest(e.target.value, element, 'lastName');
+                        props.setLastName(e.target.value);
+                      }}
                       onDoubleClick={(e) => {
                         e.target.readOnly = false;
                         setReadOnly(true);
@@ -140,11 +148,10 @@ export default function List(props) {
                     </button>
                   </th>
                   <th>
-                    {' '}
                     <input
                       id={'attendingDeadline' + element.id}
                       readOnly={readOnly}
-                      defaultValue=""
+                      defaultValue={element.deadline}
                       type="text"
                       onChange={(e) => setAttendingDeadline(e.target.value)}
                       onDoubleClick={(e) => {
@@ -154,6 +161,7 @@ export default function List(props) {
                       }}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
+                          e.target.type = 'text';
                           e.target.readOnly = true;
                           setReadOnly(true);
                           const today = new Date();
@@ -163,8 +171,12 @@ export default function List(props) {
                             Number(e.target.value.slice(8, 10)),
                           );
                           if (enteredDate >= today) {
-                            // Change checked to
-                            //updateGuest(true, element, 'attendingDate');
+                            updateGuest(e.target.value, element, 'deadline');
+                            updateGuest('true', element, 'attending');
+                          } else {
+                            e.target.value = '';
+                            updateGuest('', element, 'deadline');
+                            updateGuest(false, element, 'attending');
                           }
                         }
                       }}
