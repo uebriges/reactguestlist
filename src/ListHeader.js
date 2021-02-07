@@ -31,21 +31,25 @@ export default function ListHeader(props) {
   }
 
   async function filter(filterid) {
+    console.log('eventId: ', props.eventId);
+    console.log('eventList: ', props.eventList);
+    console.log('guestList: ', props.guestList);
+
     if (filterid === 'all') {
-      props.setGuestList(await props.loadGuests(true));
+      props.setGuestList(await props.loadGuests(true, props.eventId));
     } else if (filterid === 'attending') {
-      const onlyAttendingGuests = (await props.loadGuests(true)).filter(
-        (element) => {
-          return element.attending;
-        },
-      );
+      const onlyAttendingGuests = (
+        await props.loadGuests(true, props.eventId)
+      ).filter((element) => {
+        return element.attending;
+      });
       props.setGuestList(onlyAttendingGuests);
     } else if (filterid === 'notAttending') {
-      const onlyAttendingGuests = (await props.loadGuests(true)).filter(
-        (element) => {
-          return !element.attending;
-        },
-      );
+      const onlyAttendingGuests = (
+        await props.loadGuests(true, props.eventId)
+      ).filter((element) => {
+        return !element.attending;
+      });
       props.setGuestList(onlyAttendingGuests);
     }
   }

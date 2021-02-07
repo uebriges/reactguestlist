@@ -76,6 +76,7 @@ export default function Sidebar(props) {
                 <button
                   key={element.eventId}
                   onClick={(e) => {
+                    console.log('element.eventId: ', element.eventId);
                     openGuestList(element.eventId);
                   }}
                 >

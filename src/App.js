@@ -7,7 +7,7 @@ import { AppStyles } from './Styles';
 
 function App() {
   const [guestList, setGuestList] = useState([]);
-  const [eventId, setEventId] = useState();
+  const [eventId, setEventId] = useState(0);
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests(shouldReturn = false, id) {
@@ -18,6 +18,7 @@ function App() {
       const allGuests = await response.json();
       console.log('in load guests: ', allGuests);
 
+      console.log('loadGuests eventId: ', eventId);
       setEventId(id);
       setGuestList(allGuests);
 
@@ -33,7 +34,7 @@ function App() {
 
   useEffect(() => {
     console.log('In useEffect in App.js');
-    loadGuests();
+    loadGuests(false, eventId);
   }, []);
 
   return (
@@ -46,14 +47,18 @@ function App() {
         setEventId={setEventId}
         eventId={eventId}
       />
-      <EventArea
-        baseUrl={baseUrl}
-        setGuestList={setGuestList}
-        guestList={guestList}
-        loadGuests={loadGuests}
-        setEventId={setEventId}
-        eventId={eventId}
-      />
+      {eventId === 0 ? (
+        <div>nothing selected</div>
+      ) : (
+        <EventArea
+          baseUrl={baseUrl}
+          setGuestList={setGuestList}
+          guestList={guestList}
+          loadGuests={loadGuests}
+          setEventId={setEventId}
+          eventId={eventId}
+        />
+      )}
     </div>
   );
 }

@@ -16,41 +16,61 @@ export default function List(props) {
 
   async function deleteAllGuests() {
     console.log('Guest list: ', props.guestList);
-    let response;
-    props.guestList.map(async (element, id) => {
-      response = await fetch(`${props.baseUrl}/${element.id}`, {
-        method: 'DELETE',
-      });
-      const deletedGuest = await response.json();
-    });
-    props.setGuestList([]);
+    if (props.guestList) {
+      const eventId = props.guestList[0].id.split('-')[0];
+      let response;
+      console.log('props.eventId', props.eventId);
+      response = await fetch(
+        `${props.baseUrl}/deleteAttendingEventGuests/${eventId}`,
+        {
+          method: 'DELETE',
+        },
+      );
+      const returnedMessage = await response.json();
+      props.setGuestList(
+        props.guestList.filter((element) => {
+          return !element.attending;
+        }),
+      );
+    }
   }
 
   async function deleteSingleGuest(id) {
+    console.log('delete single: ', id);
     const filtered = await props.guestList.filter(async (element, index) => {
+      console.log('element.id: ', element.id);
       if (element.id === id) {
-        const response = await fetch(`${props.baseUrl}/${element.id}`, {
-          method: 'DELETE',
-        });
+        const response = await fetch(
+          `${props.baseUrl}/eventGuest/${element.id}`,
+          {
+            method: 'DELETE',
+          },
+        );
+        console.log('response: ', response);
         const deletedGuest = await response.json();
         console.log('deleted guest: ', deletedGuest);
         return false;
-      } else {
-        return true;
       }
+      return true;
     });
     console.log('filtered: ', filtered);
     props.setGuestList(filtered);
   }
 
   async function updateGuest(value, guestObject, property) {
-    const response = await fetch(`${props.baseUrl}/${guestObject.id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
+    console.log('iin updateGuest');
+    const response = await fetch(
+      `${props.baseUrl}/ModifyEG/${guestObject.id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          [property]: value,
+        }),
       },
-      body: JSON.stringify({ [property]: value }),
-    });
+    );
     const updatedGuest = await response.json();
     const updatedGuestList = props.guestList.map((element) => {
       if (element.id === updatedGuest.id) {
