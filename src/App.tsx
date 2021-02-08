@@ -5,12 +5,20 @@ import EventArea from './EventArea';
 import Sidebar from './Sidebar';
 import { AppStyles } from './Styles';
 
+export interface IGuest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  attending: boolean;
+  deadline: string;
+}
+
 function App() {
-  const [guestList, setGuestList] = useState([]);
+  const [guestList, setGuestList] = useState<IGuest[]>([]);
   const [eventId, setEventId] = useState(0);
   const baseUrl = 'http://localhost:5000';
 
-  async function loadGuests(shouldReturn = false, id) {
+  async function loadGuests(shouldReturn = false, id: number) {
     console.log('id: ', id);
     if (id) {
       const response = await fetch(`${baseUrl}/allEventGuests?id=${id}`);

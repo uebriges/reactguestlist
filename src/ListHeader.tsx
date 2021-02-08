@@ -3,54 +3,83 @@
 // Add new guest
 // Filter
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   addUserAndFilterStyles,
   eventInfoStyles,
   ListHeaderStyles,
 } from './Styles';
 
-export default function ListHeader(props) {
-  const [checkedId, setCheckedId] = useState('all');
+interface IGuest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  attending: boolean;
+  deadline: string;
+}
 
+interface IPropsListHeader {
+  guestList: object[];
+  setGuestList: (guestList: IGuest[]) => void;
+  firstName: string;
+  lastName: string;
+  setFirstName: (firstName: string) => void;
+  setLastName: (lastName: string) => void;
+  loadGuests: (shouldReturn: boolean, id: number) => any;
+  baseUrl: string;
+  setEventId: (eventId: number) => void;
+  eventId: number;
+}
+
+const ListHeader: React.FC<IPropsListHeader> = ({
+  guestList,
+  setGuestList,
+  firstName,
+  lastName,
+  setFirstName,
+  setLastName,
+  loadGuests,
+  baseUrl,
+  setEventId,
+  eventId,
+}) => {
   async function addGuest() {
-    const response = await fetch(`${props.baseUrl}/addNewGuestToEvent`, {
+    const response = await fetch(`${baseUrl}/addNewGuestToEvent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        eventId: props.eventId,
-        firstName: props.firstName,
-        lastName: props.lastName,
+        eventId: eventId,
+        firstName: firstName,
+        lastName: lastName,
       }),
     });
     const createdGuest = await response.json();
-    const guestListTemp = [...props.guestList, createdGuest];
-    props.setGuestList(guestListTemp);
+    const guestListTemp: IGuest[] = [...guestList, createdGuest];
+    setGuestList(guestListTemp);
   }
 
-  async function filter(filterid) {
-    console.log('eventId: ', props.eventId);
-    console.log('eventList: ', props.eventList);
-    console.log('guestList: ', props.guestList);
+  async function filter(filterid: string) {
+    console.log('eventId: ', eventId);
+    console.log('guestList: ', guestList);
 
     if (filterid === 'all') {
-      props.setGuestList(await props.loadGuests(true, props.eventId));
+      setGuestList(await loadGuests(true, eventId));
     } else if (filterid === 'attending') {
-      const onlyAttendingGuests = (
-        await props.loadGuests(true, props.eventId)
-      ).filter((element) => {
-        return element.attending;
-      });
-      props.setGuestList(onlyAttendingGuests);
+      const onlyAttendingGuests = (await loadGuests(true, eventId)).filter(
+        (element: IGuest) => {
+          return element.attending;
+        },
+      );
+      setGuestList(onlyAttendingGuests);
     } else if (filterid === 'notAttending') {
-      const onlyAttendingGuests = (
-        await props.loadGuests(true, props.eventId)
-      ).filter((element) => {
-        return !element.attending;
-      });
-      props.setGuestList(onlyAttendingGuests);
+      const onlyAttendingGuests = (await loadGuests(true, eventId)).filter(
+        (element: IGuest) => {
+          return !element.attending;
+        },
+      );
+      setGuestList(onlyAttendingGuests);
     }
   }
 
@@ -66,14 +95,14 @@ export default function ListHeader(props) {
             <input
               type="text"
               id="firstName"
-              onChange={(e) => props.setFirstName(e.target.value)}
+              onChange={(e) => setFirstName(e.target.value)}
             />
           </label>
           <label htmlFor="lastName">
             <input
               type="text"
               id="lastName"
-              onChange={(e) => props.setLastName(e.target.value)}
+              onChange={(e) => setLastName(e.target.value)}
             />
           </label>
           <button onClick={addGuest}>Add Guest</button>
@@ -119,4 +148,6 @@ export default function ListHeader(props) {
       </div>
     </div>
   );
-}
+};
+
+export default ListHeader;

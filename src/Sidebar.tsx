@@ -4,14 +4,35 @@ import React, { useEffect, useState } from 'react';
 // Create new Event
 // List of Events available
 
-export default function Sidebar(props) {
-  const [eventLocation, setEventLocation] = useState('');
-  const [eventName, setEventName] = useState('');
-  const [eventList, setEventList] = useState([]);
-  // const [event, setEvent] = useState({});
+interface IPropsSidebar {
+  baseUrl: string;
+  setGuestList: (guestList: []) => void;
+  guestList: object[];
+  loadGuests: (shouldReturn: boolean, id: number) => void;
+  setEventId: (eventId: number) => void;
+  eventId: number;
+}
 
-  async function loadEvents(shouldReturn) {
-    const response = await fetch(`${props.baseUrl}/events`);
+interface IEventLIst {
+  eventId: number;
+  eventLocation: string;
+  eventName: string;
+}
+
+const Sidebar: React.FC<IPropsSidebar> = ({
+  baseUrl,
+  setGuestList,
+  guestList,
+  loadGuests,
+  setEventId,
+  eventId,
+}) => {
+  const [eventLocation, setEventLocation] = useState('');
+  const [eventName, setEventName] = useState<string>('');
+  const [eventList, setEventList] = useState<IEventLIst[]>([]);
+
+  async function loadEvents(shouldReturn: boolean = false) {
+    const response = await fetch(`${baseUrl}/events`);
     const allEvents = await response.json();
     console.log('in load events: ', allEvents);
 
@@ -22,7 +43,7 @@ export default function Sidebar(props) {
   }
 
   async function createEvent() {
-    const response = await fetch(`${props.baseUrl}/newEvent`, {
+    const response = await fetch(`${baseUrl}/newEvent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,9 +58,9 @@ export default function Sidebar(props) {
     setEventList(eventListTemp);
   }
 
-  async function openGuestList(id) {
+  async function openGuestList(id: number) {
     console.log('id in openGuestList: ', id);
-    props.loadGuests(false, id);
+    loadGuests(false, id);
   }
 
   useEffect(() => {
@@ -89,4 +110,6 @@ export default function Sidebar(props) {
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;

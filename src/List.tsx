@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 // List
 // - Edit first and last name
@@ -8,44 +8,71 @@ import { useState } from 'react';
 // - Attending deadline
 // Delete all guest button
 
-export default function List(props) {
-  const [editable, setEditable] = useState(false);
-  const [readOnly, setReadOnly] = useState(true);
-  const [attending, setAttending] = useState();
-  const [attendingDeadline, setAttendingDeadline] = useState();
+interface IGuest {
+  id: string;
+  firstName: string;
+  lastName: string;
+  attending: boolean;
+  deadline: string;
+}
+
+interface IPropsList {
+  guestList: IGuest[];
+  setGuestList: (guestList: IGuest[]) => void;
+  firstName: string;
+  lastName: string;
+  setFirstName: (firstName: string) => void;
+  setLastName: (lastName: string) => void;
+  loadGuests: (shouldReturn: boolean, id: number) => any;
+  baseUrl: string;
+}
+
+const List: React.FC<IPropsList> = ({
+  guestList,
+  setGuestList,
+  firstName,
+  lastName,
+  setFirstName,
+  setLastName,
+  loadGuests,
+  baseUrl,
+}) => {
+  const [editable, setEditable] = useState<boolean>(false);
+  const [readOnly, setReadOnly] = useState<boolean>(true);
+  const [attending, setAttending] = useState<boolean>();
+  const [attendingDeadline, setAttendingDeadline] = useState<
+    string | undefined
+  >();
 
   async function deleteAllGuests() {
-    console.log('Guest list: ', props.guestList);
-    if (props.guestList) {
-      const eventId = props.guestList[0].id.split('-')[0];
+    console.log('Guest list: ', guestList);
+    if (guestList) {
+      const eventId = guestList[0].id.split('-')[0];
       let response;
-      console.log('props.eventId', props.eventId);
+      console.log('eventId', eventId);
       response = await fetch(
-        `${props.baseUrl}/deleteAttendingEventGuests/${eventId}`,
+        `${baseUrl}/deleteAttendingEventGuests/${eventId}`,
         {
           method: 'DELETE',
         },
       );
       const returnedMessage = await response.json();
-      props.setGuestList(
-        props.guestList.filter((element) => {
+      setGuestList(
+        guestList.filter((element) => {
           return !element.attending;
         }),
       );
     }
   }
 
-  async function deleteSingleGuest(id) {
+  async function deleteSingleGuest(id: string) {
     console.log('delete single: ', id);
-    const filtered = await props.guestList.filter(async (element, index) => {
+    const filtered = await guestList.filter(async (element, index) => {
       console.log('element.id: ', element.id);
       if (element.id === id) {
-        const response = await fetch(
-          `${props.baseUrl}/eventGuest/${element.id}`,
-          {
-            method: 'DELETE',
-          },
-        );
+        const response = await fetch(`${baseUrl}/eventGuest/${element.id}`, {
+          method: 'DELETE',
+        });
         console.log('response: ', response);
         const deletedGuest = await response.json();
         console.log('deleted guest: ', deletedGuest);
@@ -54,32 +81,33 @@ export default function List(props) {
       return true;
     });
     console.log('filtered: ', filtered);
-    props.setGuestList(filtered);
+    setGuestList(filtered);
   }
 
-  async function updateGuest(value, guestObject, property) {
+  async function updateGuest(
+    value: string,
+    guestObject: IGuest,
+    property: string,
+  ) {
     console.log('iin updateGuest');
-    const response = await fetch(
-      `${props.baseUrl}/ModifyEG/${guestObject.id}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          [property]: value,
-        }),
+    const response = await fetch(`${baseUrl}/ModifyEG/${guestObject.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({
+        [property]: value,
+      }),
+    });
     const updatedGuest = await response.json();
-    const updatedGuestList = props.guestList.map((element) => {
+    const updatedGuestList = guestList.map((element) => {
       if (element.id === updatedGuest.id) {
         return updatedGuest;
       } else {
         return element;
       }
     });
-    props.setGuestList(updatedGuestList);
+    setGuestList(updatedGuestList);
   }
 
   return (
@@ -97,7 +125,7 @@ export default function List(props) {
             </tr>
           </thead>
           <tbody>
-            {props.guestList.map((element, id) => {
+            {guestList.map((element, id) => {
               return (
                 <tr id={element.id} key={element.id + 'key'}>
                   <th>{element.id}</th>
@@ -108,15 +136,17 @@ export default function List(props) {
                       defaultValue={element.firstName}
                       onChange={(e) => {
                         updateGuest(e.target.value, element, 'firstName');
-                        props.setFirstName(e.target.value);
+                        setFirstName(e.target.value);
                       }}
-                      onDoubleClick={(e) => {
-                        e.target.readOnly = false;
+                      onDoubleClick={(
+                        e: React.MouseEvent<HTMLInputElement>,
+                      ) => {
+                        (e.target as HTMLInputElement).readOnly = false;
                         setReadOnly(true);
                       }}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                          e.target.readOnly = true;
+                          (e.target as HTMLInputElement).readOnly = true;
                           setReadOnly(true);
                         }
                       }}
@@ -129,15 +159,17 @@ export default function List(props) {
                       defaultValue={element.lastName}
                       onChange={(e) => {
                         updateGuest(e.target.value, element, 'lastName');
-                        props.setLastName(e.target.value);
+                        setLastName(e.target.value);
                       }}
-                      onDoubleClick={(e) => {
-                        e.target.readOnly = false;
+                      onDoubleClick={(
+                        e: React.MouseEvent<HTMLInputElement, MouseEvent>,
+                      ) => {
+                        (e.target as HTMLInputElement).readOnly = false;
                         setReadOnly(true);
                       }}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                          e.target.readOnly = true;
+                          (e.target as HTMLInputElement).readOnly = true;
                           setReadOnly(true);
                         }
                       }}
@@ -149,7 +181,11 @@ export default function List(props) {
                       type="checkbox"
                       checked={element.attending}
                       onChange={(e) => {
-                        updateGuest(e.target.checked, element, 'attending');
+                        updateGuest(
+                          e.target.checked.toString(),
+                          element,
+                          'attending',
+                        );
                         setAttending(e.target.checked);
                       }}
                     />
@@ -167,28 +203,38 @@ export default function List(props) {
                       type="text"
                       onChange={(e) => setAttendingDeadline(e.target.value)}
                       onDoubleClick={(e) => {
-                        e.target.readOnly = false;
+                        (e.target as HTMLInputElement).readOnly = false;
                         setReadOnly(true);
-                        e.target.type = 'date';
+                        (e.target as HTMLInputElement).type = 'date';
                       }}
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                          e.target.type = 'text';
-                          e.target.readOnly = true;
+                          (e.target as HTMLInputElement).type = 'text';
+                          (e.target as HTMLInputElement).readOnly = true;
                           setReadOnly(true);
                           const today = new Date();
                           const enteredDate = new Date(
-                            e.target.value.slice(0, 4),
-                            Number(e.target.value.slice(5, 7)) - 1,
-                            Number(e.target.value.slice(8, 10)),
+                            Number(
+                              (e.target as HTMLInputElement).value.slice(0, 4),
+                            ),
+                            Number(
+                              (e.target as HTMLInputElement).value.slice(5, 7),
+                            ) - 1,
+                            Number(
+                              (e.target as HTMLInputElement).value.slice(8, 10),
+                            ),
                           );
                           if (enteredDate >= today) {
-                            updateGuest(e.target.value, element, 'deadline');
+                            updateGuest(
+                              (e.target as HTMLInputElement).value.toString(),
+                              element,
+                              'deadline',
+                            );
                             updateGuest('true', element, 'attending');
                           } else {
-                            e.target.value = '';
+                            (e.target as HTMLInputElement).value = '';
                             updateGuest('', element, 'deadline');
-                            updateGuest(false, element, 'attending');
+                            updateGuest(false.toString(), element, 'attending');
                           }
                         }
                       }}
@@ -205,4 +251,6 @@ export default function List(props) {
       </div>
     </div>
   );
-}
+};
+
+export default List;
