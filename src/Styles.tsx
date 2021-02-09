@@ -151,6 +151,10 @@ export const ListStyles = css`
   align-items: center;
   padding: 30px;
 
+  button {
+    margin-bottom: 40px;
+  }
+
   table {
     tr {
       button {

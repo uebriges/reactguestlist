@@ -105,6 +105,9 @@ const List: React.FC<IPropsList> = ({
   return (
     <div css={ListStyles}>
       <div>
+        <button onClick={deleteAllGuests}>Wipe all attending guests</button>
+      </div>
+      <div>
         <table>
           <thead>
             <tr>
@@ -241,9 +244,6 @@ const List: React.FC<IPropsList> = ({
             })}
           </tbody>
         </table>
-      </div>
-      <div>
-        <button onClick={deleteAllGuests}>Wipe guest list</button>
       </div>
     </div>
   );
