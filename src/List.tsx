@@ -81,7 +81,8 @@ const List: React.FC<IPropsList> = ({
     guestObject: IGuest,
     property: string,
   ) {
-    console.log('iin updateGuest');
+    console.log('value: ', value);
+    console.log('in updateGuest');
     const response = await fetch(`${baseUrl}/ModifyEG/${guestObject.id}`, {
       method: 'PATCH',
       headers: {
@@ -92,6 +93,12 @@ const List: React.FC<IPropsList> = ({
       }),
     });
     const updatedGuest = await response.json();
+    console.log('updatedGuest: ', updatedGuest);
+    // needed for the check property to properly update
+    updatedGuest.attending === 'true'
+      ? (updatedGuest.attending = true)
+      : (updatedGuest.attending = false);
+
     const updatedGuestList = guestList.map((element) => {
       if (element.id === updatedGuest.id) {
         return updatedGuest;
