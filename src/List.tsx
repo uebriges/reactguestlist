@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import React, { useState } from 'react';
-import deleteLogo from './delete-button.png';
+import deleteLogo from './delete-button.svg';
 import { ListStyles } from './Styles';
 // List
 // - Edit first and last name

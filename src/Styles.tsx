@@ -22,7 +22,7 @@ export const AppStyles = css`
     box-shadow: 2px 2px 5px;
 
     :hover {
-      background-color: #a8ceb7;
+      background-color: rgba(10, 1, 12, 0.1);
       /* color: #fff; */
       transition: background-color 0.3s ease, color 0.3s ease;
     }
@@ -153,6 +153,9 @@ export const ListStyles = css`
 
   table {
     tr {
+      button {
+        display: inline-flex;
+      }
     }
 
     th {
