@@ -111,6 +111,13 @@ const ListHeader: React.FC<IPropsListHeader> = ({
           id="firstName"
           value={newGuestFirstName}
           onChange={(e) => setNewGuestFirstName(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              (document.getElementById(
+                'addGuestBtn',
+              ) as HTMLButtonElement).click();
+            }
+          }}
         />
         <br />
         <input
@@ -119,9 +126,18 @@ const ListHeader: React.FC<IPropsListHeader> = ({
           id="lastName"
           value={newGuestLastName}
           onChange={(e) => setNewGuestLastName(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              (document.getElementById(
+                'addGuestBtn',
+              ) as HTMLButtonElement).click();
+            }
+          }}
         />
         <br />
-        <button onClick={addGuest}>Add Guest</button>
+        <button onClick={addGuest} id="addGuestBtn">
+          Add Guest
+        </button>
         <p>{missingFirstOrLastNameErr}</p>
       </div>
       <div className="FilterGuests">

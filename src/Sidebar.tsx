@@ -114,6 +114,13 @@ const Sidebar: React.FC<IPropsSidebar> = ({
           onChange={(e) => {
             setEventName(e.target.value);
           }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              (document.getElementById(
+                'createEventBtn',
+              ) as HTMLButtonElement).click();
+            }
+          }}
         />
         <input
           type="text"
@@ -123,8 +130,17 @@ const Sidebar: React.FC<IPropsSidebar> = ({
           onChange={(e) => {
             setEventLocation(e.target.value);
           }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              (document.getElementById(
+                'createEventBtn',
+              ) as HTMLButtonElement).click();
+            }
+          }}
         />
-        <button onClick={createEvent}>Create</button>
+        <button id="createEventBtn" onClick={createEvent}>
+          Create
+        </button>
         <p>{eventLocationOrNameMissingErr}</p>
       </div>
       <div className="SideBarExistingEvents">
