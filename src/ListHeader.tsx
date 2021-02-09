@@ -54,7 +54,7 @@ const ListHeader: React.FC<IPropsListHeader> = ({
       const createdGuest = await response.json();
       createdGuest.attending = createdGuest.attending === 'true' ? true : false;
       console.log('createdGuest: ', createdGuest);
-      let guestListTemp: IGuest[] = [...guestList, createdGuest];
+      const guestListTemp: IGuest[] = [...guestList, createdGuest];
       setGuestList(guestListTemp);
       setMissingFirstOrLastNameErr('');
       setNewGuestFirstName('');
