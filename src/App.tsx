@@ -19,7 +19,6 @@ function App() {
   const [eventName, setEventName] = useState<string>('');
   const [currentEventLocation, setCurrentEventLocation] = useState('');
   const [currentEventName, setCurrentEventName] = useState('');
-  const [genericError, setGenericError] = useState('');
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests(shouldReturn = false, id: number) {
@@ -64,8 +63,6 @@ function App() {
         setEventLocation={setEventLocation}
         setCurrentEventLocation={setCurrentEventLocation}
         setCurrentEventName={setCurrentEventName}
-        genericError={genericError}
-        setGenericError={setGenericError}
       />
 
       <EventArea
@@ -77,8 +74,6 @@ function App() {
         eventId={eventId}
         currentEventLocation={currentEventLocation}
         currentEventName={currentEventName}
-        genericError={genericError}
-        setGenericError={setGenericError}
       />
     </div>
   );

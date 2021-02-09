@@ -23,8 +23,6 @@ interface IPropsListHeader {
   eventId: number;
   currentEventLocation: string;
   currentEventName: string;
-  genericError: string;
-  setGenericError: (error: string) => void;
 }
 
 const ListHeader: React.FC<IPropsListHeader> = ({
@@ -36,16 +34,17 @@ const ListHeader: React.FC<IPropsListHeader> = ({
   eventId,
   currentEventLocation,
   currentEventName,
-  genericError,
-  setGenericError,
 }) => {
   const [newGuestFirstName, setNewGuestFirstName] = useState('');
   const [newGuestLastName, setNewGuestLastName] = useState('');
+  const [missingFirstOrLastNameErr, setMissingFirstOrLastNameErr] = useState(
+    '',
+  );
 
   async function addGuest() {
     console.log('newGuestnewGuestFirstName: ', newGuestFirstName);
     console.log('newGuestnewGuestLastName: ', newGuestLastName);
-
+    console.log('eventId: ', eventId);
     if (newGuestFirstName && newGuestLastName) {
       const response = await fetch(`${baseUrl}/addNewGuestToEvent`, {
         method: 'POST',
@@ -61,14 +60,14 @@ const ListHeader: React.FC<IPropsListHeader> = ({
       const createdGuest = await response.json();
       const guestListTemp: IGuest[] = [...guestList, createdGuest];
       setGuestList(guestListTemp);
-      setGenericError('');
+      setMissingFirstOrLastNameErr('');
       setNewGuestFirstName('');
       setNewGuestLastName('');
     } else {
       if (!newGuestFirstName) {
-        setGenericError('First name is not given.');
+        setMissingFirstOrLastNameErr('First name is not given.');
       } else if (!newGuestLastName) {
-        setGenericError('Last name is not given.');
+        setMissingFirstOrLastNameErr('Last name is not given.');
       }
     }
   }
@@ -123,7 +122,7 @@ const ListHeader: React.FC<IPropsListHeader> = ({
         />
         <br />
         <button onClick={addGuest}>Add Guest</button>
-        <p>{genericError}</p>
+        <p>{missingFirstOrLastNameErr}</p>
       </div>
       <div className="FilterGuests">
         <fieldset id="radioFilters">

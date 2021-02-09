@@ -18,8 +18,6 @@ interface IPropsSidebar {
   setEventName: (eventName: string) => void;
   setCurrentEventLocation: (currentEventLocation: string) => void;
   setCurrentEventName: (currentEventName: string) => void;
-  setGenericError: (error: string) => void;
-  genericError: string;
 }
 
 interface IEventLIst {
@@ -41,10 +39,12 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   setEventName,
   setCurrentEventLocation,
   setCurrentEventName,
-  setGenericError,
-  genericError,
 }) => {
   const [eventList, setEventList] = useState<IEventLIst[]>([]);
+  const [
+    eventLocationOrNameMissingErr,
+    setEventLocationOrNameMissingErr,
+  ] = useState('');
 
   async function loadEvents(shouldReturn: boolean = false) {
     const response = await fetch(`${baseUrl}/events`);
@@ -73,26 +73,19 @@ const Sidebar: React.FC<IPropsSidebar> = ({
       const eventListTemp = [...eventList, createdEvent];
       console.log('created event: ', createdEvent);
 
-      setEventId(createdEvent.id);
-      console.log('1');
+      setEventId(createdEvent.eventId);
       setEventList(eventListTemp);
-      console.log('2');
       setCurrentEventName(createdEvent.eventName);
-      console.log('3');
       setCurrentEventLocation(createdEvent.eventLocation);
-      console.log('4');
       setEventName('');
-      console.log('5');
       setEventLocation('');
-      console.log('6');
-      setGenericError('');
-      console.log('6');
+      setEventLocationOrNameMissingErr('');
       setGuestList([]);
     } else {
       if (!eventName) {
-        setGenericError('Event name not given.');
+        setEventLocationOrNameMissingErr('Event name not given.');
       } else if (!eventLocation) {
-        setGenericError('Event location not given.');
+        setEventLocationOrNameMissingErr('Event location not given.');
       }
     }
   }
@@ -132,7 +125,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
           }}
         />
         <button onClick={createEvent}>Create</button>
-        <p>{genericError}</p>
+        <p>{eventLocationOrNameMissingErr}</p>
       </div>
       <div className="SideBarExistingEvents">
         <ul>

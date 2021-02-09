@@ -16,8 +16,6 @@ interface IPropsEventArea {
   eventId: number;
   currentEventLocation: string;
   currentEventName: string;
-  genericError: string;
-  setGenericError: (error: string) => void;
 }
 
 const EventArea: React.FC<IPropsEventArea> = ({
@@ -29,8 +27,6 @@ const EventArea: React.FC<IPropsEventArea> = ({
   eventId,
   currentEventLocation,
   currentEventName,
-  genericError,
-  setGenericError,
 }) => {
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -60,8 +56,6 @@ const EventArea: React.FC<IPropsEventArea> = ({
             eventId={eventId}
             currentEventLocation={currentEventLocation}
             currentEventName={currentEventName}
-            genericError={genericError}
-            setGenericError={setGenericError}
           />
           <List
             guestList={guestList}
