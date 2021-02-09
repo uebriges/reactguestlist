@@ -4,7 +4,8 @@ import deleteLogo from './delete-button.svg';
 import { sidebarStyles } from './Styles';
 
 // Create new Event
-// List of Events available
+// List of available events (button to chose)
+// More then Stretch: Delete Event
 
 interface IPropsSidebar {
   baseUrl: string;
@@ -46,7 +47,6 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   async function loadEvents(shouldReturn: boolean = false) {
     const response = await fetch(`${baseUrl}/events`);
     const allEvents = await response.json();
-    console.log('in load events: ', allEvents);
 
     setEventList(allEvents);
     if (shouldReturn) {
@@ -68,7 +68,6 @@ const Sidebar: React.FC<IPropsSidebar> = ({
       });
       const createdEvent = await response.json();
       const eventListTemp = [...eventList, createdEvent];
-      console.log('created event: ', createdEvent);
 
       setEventId(createdEvent.eventId);
       setEventList(eventListTemp);
@@ -88,20 +87,14 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   }
 
   async function deleteEvent(eventId: string) {
-    console.log('id: ', eventId);
-
     if (eventId) {
-      const response = await fetch(`${baseUrl}/deleteEvent/${eventId}`, {
+      await fetch(`${baseUrl}/deleteEvent/${eventId}`, {
         method: 'DELETE',
       });
-      const deletedEvent = await response.json();
-      console.log('deleted event: ', deletedEvent.eventId);
 
       const updatedEventList = eventList.filter((element) => {
         return !(element.eventId.toString() === eventId);
       });
-
-      console.log('updated event list: ', updatedEventList);
 
       setEventList(updatedEventList);
       setEventId(0);
@@ -109,7 +102,6 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   }
 
   async function openGuestList(id: number) {
-    console.log('id in openGuestList: ', id);
     loadGuests(false, id);
   }
 
@@ -168,8 +160,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
               <li key={'Event' + element.eventId}>
                 <button
                   key={element.eventId}
-                  onClick={(e) => {
-                    console.log('element.eventId: ', element.eventId);
+                  onClick={() => {
                     setCurrentEventLocation(element.eventLocation);
                     setCurrentEventName(element.eventName);
                     openGuestList(element.eventId);
@@ -182,7 +173,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
                 <button
                   id={'deleteEvent' + element.eventId}
                   className="deleteEvent"
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  onClick={() => {
                     deleteEvent(element.eventId.toString());
                   }}
                 >

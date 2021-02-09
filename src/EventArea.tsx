@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 // ListHeader
 // List
-import React, { useState } from 'react';
+import React from 'react';
 import { IGuest } from './App';
 import List from './List';
 import ListHeader from './ListHeader';
@@ -26,11 +26,6 @@ const EventArea: React.FC<IPropsEventArea> = ({
   currentEventLocation,
   currentEventName,
 }) => {
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-
-  console.log(eventId);
-
   return (
     <div css={eventAreaStyles}>
       {eventId === 0 ? (
@@ -57,8 +52,6 @@ const EventArea: React.FC<IPropsEventArea> = ({
           <List
             guestList={guestList}
             setGuestList={setGuestList}
-            setFirstName={setFirstName}
-            setLastName={setLastName}
             baseUrl={baseUrl}
           />
         </>

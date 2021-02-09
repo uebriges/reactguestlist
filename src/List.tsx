@@ -6,8 +6,9 @@ import { listStyles } from './Styles';
 // List
 // - Edit first and last name
 // - Delete guest
-// - Attending deadline
-// Delete all guest button
+// - Set to attending
+// - Set attending deadline
+// Delete all attending guests button
 interface IGuest {
   id: string;
   firstName: string;
@@ -19,29 +20,15 @@ interface IGuest {
 interface IPropsList {
   guestList: IGuest[];
   setGuestList: (guestList: IGuest[]) => void;
-  setFirstName: (firstName: string) => void;
-  setLastName: (lastName: string) => void;
   baseUrl: string;
 }
 
-const List: React.FC<IPropsList> = ({
-  guestList,
-  setGuestList,
-  setFirstName,
-  setLastName,
-  baseUrl,
-}) => {
+const List: React.FC<IPropsList> = ({ guestList, setGuestList, baseUrl }) => {
   const [readOnly, setReadOnly] = useState<boolean>(true);
-  const [attending, setAttending] = useState<boolean>();
-  const [attendingDeadline, setAttendingDeadline] = useState<
-    string | undefined
-  >();
 
   async function deleteAllGuests() {
-    console.log('Guest list: ', guestList);
     if (guestList.length > 0) {
       const eventId = guestList[0].id.split('-')[0];
-      console.log('eventId', eventId);
       const response = await fetch(
         `${baseUrl}/deleteAttendingEventGuests/${eventId}`,
         {
@@ -65,6 +52,7 @@ const List: React.FC<IPropsList> = ({
       return !(element.id === id);
     });
 
+    console.log('deleteSingle - filtered: ', filtered);
     setGuestList(filtered);
   }
 
@@ -73,8 +61,6 @@ const List: React.FC<IPropsList> = ({
     guestObject: IGuest,
     property: string,
   ) {
-    console.log('value: ', value);
-    console.log('in updateGuest');
     const response = await fetch(`${baseUrl}/ModifyEG/${guestObject.id}`, {
       method: 'PATCH',
       headers: {
@@ -85,11 +71,12 @@ const List: React.FC<IPropsList> = ({
       }),
     });
     const updatedGuest = await response.json();
-    console.log('updatedGuest: ', updatedGuest);
     // needed for the check property to properly update
     updatedGuest.attending === 'true'
       ? (updatedGuest.attending = true)
       : (updatedGuest.attending = false);
+
+    console.log('updatedGuest: ', updatedGuest);
 
     const updatedGuestList = guestList.map((element) => {
       if (element.id === updatedGuest.id) {
@@ -98,6 +85,7 @@ const List: React.FC<IPropsList> = ({
         return element;
       }
     });
+    console.log('updatedGuestList: ', updatedGuestList);
     setGuestList(updatedGuestList);
   }
 
@@ -130,7 +118,6 @@ const List: React.FC<IPropsList> = ({
                       defaultValue={element.firstName}
                       onChange={(e) => {
                         updateGuest(e.target.value, element, 'firstName');
-                        setFirstName(e.target.value);
                       }}
                       onDoubleClick={(
                         e: React.MouseEvent<HTMLInputElement>,
@@ -153,7 +140,6 @@ const List: React.FC<IPropsList> = ({
                       defaultValue={element.lastName}
                       onChange={(e) => {
                         updateGuest(e.target.value, element, 'lastName');
-                        setLastName(e.target.value);
                       }}
                       onDoubleClick={(
                         e: React.MouseEvent<HTMLInputElement, MouseEvent>,
@@ -180,12 +166,11 @@ const List: React.FC<IPropsList> = ({
                           element,
                           'attending',
                         );
-                        setAttending(e.target.checked);
                       }}
                     />
                   </th>
                   <th>
-                    <button onClick={(e) => deleteSingleGuest(element.id)}>
+                    <button onClick={() => deleteSingleGuest(element.id)}>
                       <img
                         src={deleteLogo}
                         alt="Delete single guest"
@@ -199,7 +184,6 @@ const List: React.FC<IPropsList> = ({
                       readOnly={readOnly}
                       defaultValue={element.deadline}
                       type="text"
-                      onChange={(e) => setAttendingDeadline(e.target.value)}
                       onDoubleClick={(e) => {
                         (e.target as HTMLInputElement).readOnly = false;
                         setReadOnly(true);
@@ -230,7 +214,6 @@ const List: React.FC<IPropsList> = ({
                             );
                             updateGuest('true', element, 'attending');
                           } else {
-                            console.log('asdflkj');
                             (e.target as HTMLInputElement).value = '';
                             updateGuest('', element, 'deadline');
                             updateGuest('false', element, 'attending');

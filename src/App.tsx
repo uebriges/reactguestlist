@@ -22,14 +22,14 @@ function App() {
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests(shouldReturn = false, id: number) {
-    console.log('id: ', id);
     if (id) {
       const response = await fetch(`${baseUrl}/allEventGuests?id=${id}`);
-      console.log('response: ', response);
-      const allGuests = await response.json();
-      console.log('in load guests: ', allGuests);
-
-      console.log('loadGuests eventId: ', eventId);
+      let allGuests = await response.json();
+      allGuests = allGuests.map((guest: any) => {
+        guest.attending = guest.attending === 'true' ? true : false;
+        return guest;
+      });
+      console.log('allGuests: ', allGuests);
       setEventId(id);
       setGuestList(allGuests);
 
@@ -44,9 +44,8 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('In useEffect in App.js');
     loadGuests(false, eventId);
-  }, []);
+  }, [eventId]);
 
   return (
     <div className="App" css={appStyles}>

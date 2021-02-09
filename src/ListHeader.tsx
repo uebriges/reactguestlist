@@ -2,7 +2,6 @@
 // Show Event name + Location
 // Add new guest
 // Filter
-
 import React, { useState } from 'react';
 import { listHeaderStyles } from './Styles';
 
@@ -40,9 +39,6 @@ const ListHeader: React.FC<IPropsListHeader> = ({
   );
 
   async function addGuest() {
-    console.log('newGuestnewGuestFirstName: ', newGuestFirstName);
-    console.log('newGuestnewGuestLastName: ', newGuestLastName);
-    console.log('eventId: ', eventId);
     if (newGuestFirstName && newGuestLastName) {
       const response = await fetch(`${baseUrl}/addNewGuestToEvent`, {
         method: 'POST',
@@ -56,7 +52,9 @@ const ListHeader: React.FC<IPropsListHeader> = ({
         }),
       });
       const createdGuest = await response.json();
-      const guestListTemp: IGuest[] = [...guestList, createdGuest];
+      createdGuest.attending = createdGuest.attending === 'true' ? true : false;
+      console.log('createdGuest: ', createdGuest);
+      let guestListTemp: IGuest[] = [...guestList, createdGuest];
       setGuestList(guestListTemp);
       setMissingFirstOrLastNameErr('');
       setNewGuestFirstName('');
@@ -71,9 +69,6 @@ const ListHeader: React.FC<IPropsListHeader> = ({
   }
 
   async function filter(filterid: string) {
-    console.log('eventId: ', eventId);
-    console.log('guestList: ', guestList);
-
     if (filterid === 'all') {
       setGuestList(await loadGuests(true, eventId));
     } else if (filterid === 'attending') {
