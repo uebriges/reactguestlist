@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from 'react';
-import './App.css';
 import EventArea from './EventArea';
 import Sidebar from './Sidebar';
 import { AppStyles } from './Styles';
@@ -16,6 +15,11 @@ export interface IGuest {
 function App() {
   const [guestList, setGuestList] = useState<IGuest[]>([]);
   const [eventId, setEventId] = useState(0);
+  const [eventLocation, setEventLocation] = useState('');
+  const [eventName, setEventName] = useState<string>('');
+  const [currentEventLocation, setCurrentEventLocation] = useState('');
+  const [currentEventName, setCurrentEventName] = useState('');
+  const [genericError, setGenericError] = useState('');
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests(shouldReturn = false, id: number) {
@@ -54,19 +58,28 @@ function App() {
         loadGuests={loadGuests}
         setEventId={setEventId}
         eventId={eventId}
+        eventLocation={eventLocation}
+        eventName={eventName}
+        setEventName={setEventName}
+        setEventLocation={setEventLocation}
+        setCurrentEventLocation={setCurrentEventLocation}
+        setCurrentEventName={setCurrentEventName}
+        genericError={genericError}
+        setGenericError={setGenericError}
       />
-      {eventId === 0 ? (
-        <div>nothing selected</div>
-      ) : (
-        <EventArea
-          baseUrl={baseUrl}
-          setGuestList={setGuestList}
-          guestList={guestList}
-          loadGuests={loadGuests}
-          setEventId={setEventId}
-          eventId={eventId}
-        />
-      )}
+
+      <EventArea
+        baseUrl={baseUrl}
+        setGuestList={setGuestList}
+        guestList={guestList}
+        loadGuests={loadGuests}
+        setEventId={setEventId}
+        eventId={eventId}
+        currentEventLocation={currentEventLocation}
+        currentEventName={currentEventName}
+        genericError={genericError}
+        setGenericError={setGenericError}
+      />
     </div>
   );
 }

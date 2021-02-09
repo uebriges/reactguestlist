@@ -3,12 +3,8 @@
 // Add new guest
 // Filter
 
-import React from 'react';
-import {
-  addUserAndFilterStyles,
-  eventInfoStyles,
-  ListHeaderStyles,
-} from './Styles';
+import React, { useState } from 'react';
+import { ListHeaderStyles } from './Styles';
 
 interface IGuest {
   id: string;
@@ -21,43 +17,57 @@ interface IGuest {
 interface IPropsListHeader {
   guestList: object[];
   setGuestList: (guestList: IGuest[]) => void;
-  firstName: string;
-  lastName: string;
-  setFirstName: (firstName: string) => void;
-  setLastName: (lastName: string) => void;
   loadGuests: (shouldReturn: boolean, id: number) => any;
   baseUrl: string;
   setEventId: (eventId: number) => void;
   eventId: number;
+  currentEventLocation: string;
+  currentEventName: string;
+  genericError: string;
+  setGenericError: (error: string) => void;
 }
 
 const ListHeader: React.FC<IPropsListHeader> = ({
   guestList,
   setGuestList,
-  firstName,
-  lastName,
-  setFirstName,
-  setLastName,
   loadGuests,
   baseUrl,
   setEventId,
   eventId,
+  currentEventLocation,
+  currentEventName,
+  genericError,
+  setGenericError,
 }) => {
+  const [newGuestFirstName, setNewGuestFirstName] = useState('');
+  const [newGuestLastName, setNewGuestLastName] = useState('');
+
   async function addGuest() {
-    const response = await fetch(`${baseUrl}/addNewGuestToEvent`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventId: eventId,
-        firstName: firstName,
-        lastName: lastName,
-      }),
-    });
-    const createdGuest = await response.json();
-    const guestListTemp: IGuest[] = [...guestList, createdGuest];
-    setGuestList(guestListTemp);
+    if (newGuestFirstName && newGuestLastName) {
+      const response = await fetch(`${baseUrl}/addNewGuestToEvent`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventId: eventId,
+          firstName: newGuestFirstName,
+          lastName: newGuestLastName,
+        }),
+      });
+      const createdGuest = await response.json();
+      const guestListTemp: IGuest[] = [...guestList, createdGuest];
+      setGuestList(guestListTemp);
+      setGenericError('');
+      setNewGuestFirstName('');
+      setNewGuestLastName('');
+    } else {
+      if (!newGuestFirstName) {
+        setGenericError('First name is not given.');
+      } else if (!newGuestLastName) {
+        setGenericError('Last name is not given.');
+      }
+    }
   }
 
   async function filter(filterid: string) {
@@ -85,31 +95,36 @@ const ListHeader: React.FC<IPropsListHeader> = ({
 
   return (
     <div css={ListHeaderStyles}>
-      <div css={eventInfoStyles}>
-        <p>Event: </p>
-        <p>Location: </p>
+      <div className="EventInfo">
+        <strong>Event: </strong>
+        {currentEventName}
+        <br />
+        <strong>Location: </strong>
+        {currentEventLocation}
       </div>
-      <div css={addUserAndFilterStyles}>
-        <div>
-          <label htmlFor="firstName">
-            <input
-              type="text"
-              id="firstName"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </label>
-          <label htmlFor="lastName">
-            <input
-              type="text"
-              id="lastName"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </label>
-          <button onClick={addGuest}>Add Guest</button>
-        </div>
-        <div>
-          <p>Filters: </p>
-          <fieldset id="radioFilters">
+      <div className="AddGuest">
+        <input
+          type="text"
+          placeholder="First name"
+          id="firstName"
+          value={newGuestFirstName}
+          onChange={(e) => setNewGuestFirstName(e.target.value)}
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="Last name"
+          id="lastName"
+          value={newGuestLastName}
+          onChange={(e) => setNewGuestLastName(e.target.value)}
+        />
+        <br />
+        <button onClick={addGuest}>Add Guest</button>
+        <p>{genericError}</p>
+      </div>
+      <div className="FilterGuests">
+        <fieldset id="radioFilters">
+          <div>
             <input
               type="radio"
               value="All"
@@ -120,7 +135,8 @@ const ListHeader: React.FC<IPropsListHeader> = ({
               }}
             />
             <label htmlFor="all">All </label>
-
+          </div>
+          <div>
             <input
               type="radio"
               value="Attending"
@@ -132,7 +148,8 @@ const ListHeader: React.FC<IPropsListHeader> = ({
               }}
             />
             <label htmlFor="attending">Attending </label>
-
+          </div>
+          <div>
             <input
               type="radio"
               value="Not attending"
@@ -143,8 +160,8 @@ const ListHeader: React.FC<IPropsListHeader> = ({
               }}
             />
             <label htmlFor="notAttending">Not attending </label>
-          </fieldset>
-        </div>
+          </div>
+        </fieldset>
       </div>
     </div>
   );

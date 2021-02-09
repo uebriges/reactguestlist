@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 
 import React, { useState } from 'react';
-
+import deleteLogo from './delete-button.png';
+import { ListStyles } from './Styles';
 // List
 // - Edit first and last name
 // - Delete guest
 // - Attending deadline
 // Delete all guest button
-
 interface IGuest {
   id: string;
   firstName: string;
@@ -66,21 +66,13 @@ const List: React.FC<IPropsList> = ({
   }
 
   async function deleteSingleGuest(id: string) {
-    console.log('delete single: ', id);
-    const filtered = await guestList.filter(async (element, index) => {
-      console.log('element.id: ', element.id);
-      if (element.id === id) {
-        const response = await fetch(`${baseUrl}/eventGuest/${element.id}`, {
-          method: 'DELETE',
-        });
-        console.log('response: ', response);
-        const deletedGuest = await response.json();
-        console.log('deleted guest: ', deletedGuest);
-        return false;
-      }
-      return true;
+    await fetch(`${baseUrl}/eventGuest/${id}`, {
+      method: 'DELETE',
     });
-    console.log('filtered: ', filtered);
+    const filtered = guestList.filter((element, index) => {
+      return !(element.id === id);
+    });
+
     setGuestList(filtered);
   }
 
@@ -111,7 +103,7 @@ const List: React.FC<IPropsList> = ({
   }
 
   return (
-    <div>
+    <div css={ListStyles}>
       <div>
         <table>
           <thead>
@@ -192,7 +184,11 @@ const List: React.FC<IPropsList> = ({
                   </th>
                   <th>
                     <button onClick={(e) => deleteSingleGuest(element.id)}>
-                      Delete
+                      <img
+                        src={deleteLogo}
+                        alt="Delete single guest"
+                        height="15px"
+                      />
                     </button>
                   </th>
                   <th>

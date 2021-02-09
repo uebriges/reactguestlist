@@ -3,51 +3,172 @@ import { css } from '@emotion/react';
 
 export const AppStyles = css`
   display: grid;
-  border: 1px solid;
-  grid-template-columns: 1fr 5fr;
-  height: 100vh;
-  background-color: red;
-  margin: 0px;
-  grid-template-areas:
-    'Sidebar Header'
-    'Sidebar List'
-    'Sidebar List'
-    'Sidebar List'
-    'Sidebar List'
-    'Sidebar List';
+  height: 100%;
+  background-color: none;
+  margin: 30px;
+  grid-template-columns: 2fr 7fr;
+  grid-template-rows: 1fr 7fr;
+
+  button {
+    font-size: 16px;
+    margin: 5px;
+    border: none;
+    background-color: transparent;
+    color: black;
+    padding: 5px 15px;
+    letter-spacing: 2px;
+    border-radius: 5px;
+    font-weight: normal;
+    box-shadow: 2px 2px 5px;
+
+    :hover {
+      background-color: #a8ceb7;
+      /* color: #fff; */
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+  }
+
+  input {
+    width: 80%;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+  }
 `;
 
 export const SidebarStyles = css`
-  grid-area: Sidebar;
-  border: 1px solid;
-  background-color: green;
+  grid-column: 1/2;
+  grid-row: 1/9;
+  background-color: none;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+
+  .SideBarHeader {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 50px;
+  }
+
+  .SideBarNewEvents {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 80px;
+
+    p {
+      color: red;
+    }
+  }
+
+  .SideBarExistingEvents {
+    ul {
+      list-style: none;
+      padding: none;
+      padding-inline-start: 0px;
+      width: 80%;
+      margin: auto;
+
+      li {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    button {
+      width: 80%;
+      word-break: break-word;
+    }
+  }
 `;
 
 export const EventAreaStyles = css`
-  grid-column: 2 / span 5;
-  grid-template-rows: 1fr 5fr;
-  border: 1px solid;
-  height: 100%;
-  background-color: yellow;
+  grid-column: 2/9;
+  grid-row: 1/7;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 14em 5fr;
+  background-color: none;
 `;
 
 export const ListHeaderStyles = css`
-  grid-area: Header;
-  border: 1px solid;
-  display: float;
-  background-color: gray;
+  grid-column: 1;
+  grid-row: 1/2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: none;
+  background-color: none;
+  max-height: 14em;
+  padding: 30px;
+
+  .EventInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-size: 30px;
+    margin-left: 30px;
+
+    strong {
+      display: inline;
+    }
+  }
+
+  .AddGuest {
+    color: red;
+  }
+
+  .FilterGuests {
+    margin-right: 10%;
+
+    fieldset {
+      font-size: 20px;
+      display: flex;
+      flex-direction: column;
+      width: 10vw;
+      border: none;
+    }
+
+    input {
+      width: 10%;
+      margin: 5px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+  }
 `;
 
 export const ListStyles = css`
-  grid-area: List;
-  border: 1px solid;
-  background-color: darkblue;
+  grid-column: 1;
+  grid-row: 2/7;
+  background-color: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+
+  table {
+    tr {
+    }
+
+    th {
+      width: 12vw;
+    }
+  }
 `;
 
-export const addUserAndFilterStyles = css`
-  justify-content: flex-end;
-`;
-
-export const eventInfoStyles = css`
-  justify-content: flex-end;
+export const EmptyEventAreaStyles = css`
+  margin: 3%;
+  grid-column: 1;
+  grid-row: 1/7;
+  border: 1px solid black;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
 `;

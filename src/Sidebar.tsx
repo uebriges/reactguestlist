@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
+import { SidebarStyles } from './Styles';
 
 // Create new Event
 // List of Events available
@@ -11,6 +12,14 @@ interface IPropsSidebar {
   loadGuests: (shouldReturn: boolean, id: number) => void;
   setEventId: (eventId: number) => void;
   eventId: number;
+  eventLocation: string;
+  eventName: string;
+  setEventLocation: (eventLocation: string) => void;
+  setEventName: (eventName: string) => void;
+  setCurrentEventLocation: (currentEventLocation: string) => void;
+  setCurrentEventName: (currentEventName: string) => void;
+  setGenericError: (error: string) => void;
+  genericError: string;
 }
 
 interface IEventLIst {
@@ -26,9 +35,15 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   loadGuests,
   setEventId,
   eventId,
+  eventLocation,
+  eventName,
+  setEventLocation,
+  setEventName,
+  setCurrentEventLocation,
+  setCurrentEventName,
+  setGenericError,
+  genericError,
 }) => {
-  const [eventLocation, setEventLocation] = useState('');
-  const [eventName, setEventName] = useState<string>('');
   const [eventList, setEventList] = useState<IEventLIst[]>([]);
 
   async function loadEvents(shouldReturn: boolean = false) {
@@ -43,19 +58,34 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   }
 
   async function createEvent() {
-    const response = await fetch(`${baseUrl}/newEvent`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        eventName: eventName,
-        eventLocation: eventLocation,
-      }),
-    });
-    const createdEvent = await response.json();
-    const eventListTemp = [...eventList, createdEvent];
-    setEventList(eventListTemp);
+    if (eventName && eventLocation) {
+      const response = await fetch(`${baseUrl}/newEvent`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          eventName: eventName,
+          eventLocation: eventLocation,
+        }),
+      });
+      const createdEvent = await response.json();
+      const eventListTemp = [...eventList, createdEvent];
+
+      setEventId(createdEvent.id);
+      setEventList(eventListTemp);
+      setCurrentEventName(createdEvent.eventName);
+      setCurrentEventLocation(createdEvent.eventLocation);
+      setEventName('');
+      setEventLocation('');
+      setGenericError('');
+    } else {
+      if (!eventName) {
+        setGenericError('Event name not given.');
+      } else if (!eventLocation) {
+        setGenericError('Event location not given.');
+      }
+    }
   }
 
   async function openGuestList(id: number) {
@@ -68,42 +98,52 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   }, []);
 
   return (
-    <div>
-      <div>Create new events</div>
-      <div>
-        <label htmlFor="eventName">Event name</label>
+    <div css={SidebarStyles}>
+      <div className="SideBarHeader">
+        <div>Event Manager 3000</div>
+        <p>If you order now.... </p>
+      </div>
+      <div className="SideBarNewEvents">
         <input
           type="text"
           id="eventName"
+          value={eventName}
+          placeholder="Event name"
           onChange={(e) => {
             setEventName(e.target.value);
           }}
         />
-        <label htmlFor="eventLocation">Event location</label>
         <input
           type="text"
           id="eventLocation"
+          value={eventLocation}
+          placeholder="Event location"
           onChange={(e) => {
             setEventLocation(e.target.value);
           }}
         />
         <button onClick={createEvent}>Create</button>
+        <p>{genericError}</p>
       </div>
-      <div>
+      <div className="SideBarExistingEvents">
         <ul>
           {eventList.map((element, id) => {
             return (
-              <div key={'Event' + element.eventId}>
+              <li key={'Event' + element.eventId}>
                 <button
                   key={element.eventId}
                   onClick={(e) => {
                     console.log('element.eventId: ', element.eventId);
+                    setCurrentEventLocation(element.eventLocation);
+                    setCurrentEventName(element.eventName);
                     openGuestList(element.eventId);
                   }}
                 >
-                  {element.eventName + ': ' + element.eventLocation}
+                  {'Name: ' + element.eventName}
+                  <br />
+                  {'Location: ' + element.eventLocation}
                 </button>
-              </div>
+              </li>
             );
           })}
         </ul>
