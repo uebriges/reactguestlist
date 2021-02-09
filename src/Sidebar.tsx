@@ -71,14 +71,23 @@ const Sidebar: React.FC<IPropsSidebar> = ({
       });
       const createdEvent = await response.json();
       const eventListTemp = [...eventList, createdEvent];
+      console.log('created event: ', createdEvent);
 
       setEventId(createdEvent.id);
+      console.log('1');
       setEventList(eventListTemp);
+      console.log('2');
       setCurrentEventName(createdEvent.eventName);
+      console.log('3');
       setCurrentEventLocation(createdEvent.eventLocation);
+      console.log('4');
       setEventName('');
+      console.log('5');
       setEventLocation('');
+      console.log('6');
       setGenericError('');
+      console.log('6');
+      setGuestList([]);
     } else {
       if (!eventName) {
         setGenericError('Event name not given.');

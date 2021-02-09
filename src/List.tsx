@@ -46,7 +46,7 @@ const List: React.FC<IPropsList> = ({
 
   async function deleteAllGuests() {
     console.log('Guest list: ', guestList);
-    if (guestList) {
+    if (guestList.length > 0) {
       const eventId = guestList[0].id.split('-')[0];
       let response;
       console.log('eventId', eventId);

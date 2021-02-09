@@ -43,6 +43,9 @@ const ListHeader: React.FC<IPropsListHeader> = ({
   const [newGuestLastName, setNewGuestLastName] = useState('');
 
   async function addGuest() {
+    console.log('newGuestnewGuestFirstName: ', newGuestFirstName);
+    console.log('newGuestnewGuestLastName: ', newGuestLastName);
+
     if (newGuestFirstName && newGuestLastName) {
       const response = await fetch(`${baseUrl}/addNewGuestToEvent`, {
         method: 'POST',
