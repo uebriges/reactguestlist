@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import EventArea from './EventArea';
 import Sidebar from './Sidebar';
-import { AppStyles } from './Styles';
+import { appStyles } from './Styles';
 
 export interface IGuest {
   id: string;
@@ -49,14 +49,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App" css={AppStyles}>
+    <div className="App" css={appStyles}>
       <Sidebar
         baseUrl={baseUrl}
         setGuestList={setGuestList}
-        guestList={guestList}
         loadGuests={loadGuests}
         setEventId={setEventId}
-        eventId={eventId}
         eventLocation={eventLocation}
         eventName={eventName}
         setEventName={setEventName}
@@ -70,7 +68,6 @@ function App() {
         setGuestList={setGuestList}
         guestList={guestList}
         loadGuests={loadGuests}
-        setEventId={setEventId}
         eventId={eventId}
         currentEventLocation={currentEventLocation}
         currentEventName={currentEventName}

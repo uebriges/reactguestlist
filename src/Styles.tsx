@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-export const AppStyles = css`
+export const appStyles = css`
   display: grid;
   height: 100%;
   background-color: none;
@@ -42,7 +42,7 @@ export const AppStyles = css`
   }
 `;
 
-export const SidebarStyles = css`
+export const sidebarStyles = css`
   grid-column: 1/2;
   grid-row: 1/9;
   background-color: none;
@@ -109,7 +109,7 @@ export const SidebarStyles = css`
   }
 `;
 
-export const EventAreaStyles = css`
+export const eventAreaStyles = css`
   grid-column: 2/9;
   grid-row: 1/7;
   display: grid;
@@ -118,7 +118,7 @@ export const EventAreaStyles = css`
   background-color: none;
 `;
 
-export const ListHeaderStyles = css`
+export const listHeaderStyles = css`
   grid-column: 1;
   grid-row: 1/2;
   display: flex;
@@ -167,7 +167,7 @@ export const ListHeaderStyles = css`
   }
 `;
 
-export const ListStyles = css`
+export const listStyles = css`
   grid-column: 1;
   grid-row: 2/7;
   background-color: none;
@@ -193,7 +193,7 @@ export const ListStyles = css`
   }
 `;
 
-export const EmptyEventAreaStyles = css`
+export const emptyEventAreaStyles = css`
   margin: 3%;
   grid-column: 1;
   grid-row: 1/7;

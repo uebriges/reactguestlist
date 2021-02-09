@@ -5,14 +5,13 @@ import React, { useState } from 'react';
 import { IGuest } from './App';
 import List from './List';
 import ListHeader from './ListHeader';
-import { EmptyEventAreaStyles, EventAreaStyles } from './Styles';
+import { emptyEventAreaStyles, eventAreaStyles } from './Styles';
 
 interface IPropsEventArea {
   baseUrl: string;
   setGuestList: (guestList: IGuest[]) => void;
   guestList: IGuest[];
   loadGuests: (shouldReturn: boolean, id: number) => void;
-  setEventId: (eventId: number) => void;
   eventId: number;
   currentEventLocation: string;
   currentEventName: string;
@@ -23,7 +22,6 @@ const EventArea: React.FC<IPropsEventArea> = ({
   setGuestList,
   guestList,
   loadGuests,
-  setEventId,
   eventId,
   currentEventLocation,
   currentEventName,
@@ -34,9 +32,9 @@ const EventArea: React.FC<IPropsEventArea> = ({
   console.log(eventId);
 
   return (
-    <div css={EventAreaStyles}>
+    <div css={eventAreaStyles}>
       {eventId === 0 ? (
-        <div css={EmptyEventAreaStyles}>
+        <div css={emptyEventAreaStyles}>
           <p>
             Please create a new Event
             <br />
@@ -52,7 +50,6 @@ const EventArea: React.FC<IPropsEventArea> = ({
             setGuestList={setGuestList}
             loadGuests={loadGuests}
             baseUrl={baseUrl}
-            setEventId={setEventId}
             eventId={eventId}
             currentEventLocation={currentEventLocation}
             currentEventName={currentEventName}
@@ -60,11 +57,8 @@ const EventArea: React.FC<IPropsEventArea> = ({
           <List
             guestList={guestList}
             setGuestList={setGuestList}
-            firstName={firstName}
-            lastName={lastName}
             setFirstName={setFirstName}
             setLastName={setLastName}
-            loadGuests={loadGuests}
             baseUrl={baseUrl}
           />
         </>

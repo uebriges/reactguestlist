@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
 import deleteLogo from './delete-button.svg';
-import { SidebarStyles } from './Styles';
+import { sidebarStyles } from './Styles';
 
 // Create new Event
 // List of Events available
@@ -9,10 +9,8 @@ import { SidebarStyles } from './Styles';
 interface IPropsSidebar {
   baseUrl: string;
   setGuestList: (guestList: []) => void;
-  guestList: object[];
   loadGuests: (shouldReturn: boolean, id: number) => void;
   setEventId: (eventId: number) => void;
-  eventId: number;
   eventLocation: string;
   eventName: string;
   setEventLocation: (eventLocation: string) => void;
@@ -30,10 +28,8 @@ interface IEventLIst {
 const Sidebar: React.FC<IPropsSidebar> = ({
   baseUrl,
   setGuestList,
-  guestList,
   loadGuests,
   setEventId,
-  eventId,
   eventLocation,
   eventName,
   setEventLocation,
@@ -122,7 +118,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
   }, []);
 
   return (
-    <div css={SidebarStyles}>
+    <div css={sidebarStyles}>
       <div className="SideBarHeader">
         <div>Event Manager 3000</div>
         <p>If you order now.... </p>
@@ -167,7 +163,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
       </div>
       <div className="SideBarExistingEvents">
         <ul>
-          {eventList.map((element, id) => {
+          {eventList.map((element) => {
             return (
               <li key={'Event' + element.eventId}>
                 <button

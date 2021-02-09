@@ -4,7 +4,7 @@
 // Filter
 
 import React, { useState } from 'react';
-import { ListHeaderStyles } from './Styles';
+import { listHeaderStyles } from './Styles';
 
 interface IGuest {
   id: string;
@@ -19,7 +19,6 @@ interface IPropsListHeader {
   setGuestList: (guestList: IGuest[]) => void;
   loadGuests: (shouldReturn: boolean, id: number) => any;
   baseUrl: string;
-  setEventId: (eventId: number) => void;
   eventId: number;
   currentEventLocation: string;
   currentEventName: string;
@@ -30,7 +29,6 @@ const ListHeader: React.FC<IPropsListHeader> = ({
   setGuestList,
   loadGuests,
   baseUrl,
-  setEventId,
   eventId,
   currentEventLocation,
   currentEventName,
@@ -96,7 +94,7 @@ const ListHeader: React.FC<IPropsListHeader> = ({
   }
 
   return (
-    <div css={ListHeaderStyles}>
+    <div css={listHeaderStyles}>
       <div className="EventInfo">
         <strong>Event: </strong>
         {currentEventName}

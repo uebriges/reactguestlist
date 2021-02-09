@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import deleteLogo from './delete-button.svg';
-import { ListStyles } from './Styles';
+import { listStyles } from './Styles';
 // List
 // - Edit first and last name
 // - Delete guest
@@ -19,25 +19,18 @@ interface IGuest {
 interface IPropsList {
   guestList: IGuest[];
   setGuestList: (guestList: IGuest[]) => void;
-  firstName: string;
-  lastName: string;
   setFirstName: (firstName: string) => void;
   setLastName: (lastName: string) => void;
-  loadGuests: (shouldReturn: boolean, id: number) => any;
   baseUrl: string;
 }
 
 const List: React.FC<IPropsList> = ({
   guestList,
   setGuestList,
-  firstName,
-  lastName,
   setFirstName,
   setLastName,
-  loadGuests,
   baseUrl,
 }) => {
-  const [editable, setEditable] = useState<boolean>(false);
   const [readOnly, setReadOnly] = useState<boolean>(true);
   const [attending, setAttending] = useState<boolean>();
   const [attendingDeadline, setAttendingDeadline] = useState<
@@ -48,15 +41,14 @@ const List: React.FC<IPropsList> = ({
     console.log('Guest list: ', guestList);
     if (guestList.length > 0) {
       const eventId = guestList[0].id.split('-')[0];
-      let response;
       console.log('eventId', eventId);
-      response = await fetch(
+      const response = await fetch(
         `${baseUrl}/deleteAttendingEventGuests/${eventId}`,
         {
           method: 'DELETE',
         },
       );
-      const returnedMessage = await response.json();
+      await response.json();
       setGuestList(
         guestList.filter((element) => {
           return !element.attending;
@@ -69,7 +61,7 @@ const List: React.FC<IPropsList> = ({
     await fetch(`${baseUrl}/eventGuest/${id}`, {
       method: 'DELETE',
     });
-    const filtered = guestList.filter((element, index) => {
+    const filtered = guestList.filter((element) => {
       return !(element.id === id);
     });
 
@@ -110,7 +102,7 @@ const List: React.FC<IPropsList> = ({
   }
 
   return (
-    <div css={ListStyles}>
+    <div css={listStyles}>
       <div>
         <button onClick={deleteAllGuests}>Wipe all attending guests</button>
       </div>
@@ -127,7 +119,7 @@ const List: React.FC<IPropsList> = ({
             </tr>
           </thead>
           <tbody>
-            {guestList.map((element, id) => {
+            {guestList.map((element) => {
               return (
                 <tr id={element.id} key={element.id + 'key'}>
                   <th>{element.id}</th>
