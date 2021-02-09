@@ -20,11 +20,16 @@ export const AppStyles = css`
     border-radius: 5px;
     font-weight: normal;
     box-shadow: 2px 2px 5px;
+    outline: none;
 
     :hover {
       background-color: rgba(10, 1, 12, 0.1);
       /* color: #fff; */
       transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    :active {
+      box-shadow: none;
     }
   }
 
@@ -64,6 +69,11 @@ export const SidebarStyles = css`
   }
 
   .SideBarExistingEvents {
+    max-height: 50vh;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+
     ul {
       list-style: none;
       padding: none;
@@ -74,12 +84,27 @@ export const SidebarStyles = css`
       li {
         width: 100%;
         text-align: center;
+        display: flex;
       }
     }
 
     button {
       width: 80%;
       word-break: break-word;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .deleteEvent {
+      width: 10%;
+      padding: 2px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .deleteEventImg {
+      pointer-events: none;
     }
   }
 `;

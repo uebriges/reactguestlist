@@ -231,9 +231,10 @@ const List: React.FC<IPropsList> = ({
                             );
                             updateGuest('true', element, 'attending');
                           } else {
+                            console.log('asdflkj');
                             (e.target as HTMLInputElement).value = '';
                             updateGuest('', element, 'deadline');
-                            updateGuest(false.toString(), element, 'attending');
+                            updateGuest('false', element, 'attending');
                           }
                         }
                       }}

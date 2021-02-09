@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
+import deleteLogo from './delete-button.svg';
 import { SidebarStyles } from './Styles';
 
 // Create new Event
@@ -90,6 +91,27 @@ const Sidebar: React.FC<IPropsSidebar> = ({
     }
   }
 
+  async function deleteEvent(eventId: string) {
+    console.log('id: ', eventId);
+
+    if (eventId) {
+      const response = await fetch(`${baseUrl}/deleteEvent/${eventId}`, {
+        method: 'DELETE',
+      });
+      const deletedEvent = await response.json();
+      console.log('deleted event: ', deletedEvent.eventId);
+
+      const updatedEventList = eventList.filter((element) => {
+        return !(element.eventId.toString() === eventId);
+      });
+
+      console.log('updated event list: ', updatedEventList);
+
+      setEventList(updatedEventList);
+      setEventId(0);
+    }
+  }
+
   async function openGuestList(id: number) {
     console.log('id in openGuestList: ', id);
     loadGuests(false, id);
@@ -160,6 +182,21 @@ const Sidebar: React.FC<IPropsSidebar> = ({
                   {'Name: ' + element.eventName}
                   <br />
                   {'Location: ' + element.eventLocation}
+                </button>
+                <button
+                  id={'deleteEvent' + element.eventId}
+                  className="deleteEvent"
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    deleteEvent(element.eventId.toString());
+                  }}
+                >
+                  <img
+                    id={'deleteEventImg' + element.eventId}
+                    src={deleteLogo}
+                    alt="Delete single guest"
+                    height="15px"
+                    className="deleteEventImg"
+                  />
                 </button>
               </li>
             );
