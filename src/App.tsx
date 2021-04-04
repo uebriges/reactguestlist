@@ -14,11 +14,11 @@ export interface IGuest {
 
 function App() {
   const [guestList, setGuestList] = useState<IGuest[]>([]);
-  const [eventId, setEventId] = useState(0);
-  const [eventLocation, setEventLocation] = useState('');
+  const [eventId, setEventId] = useState<number>(0);
+  const [eventLocation, setEventLocation] = useState<string>('');
   const [eventName, setEventName] = useState<string>('');
-  const [currentEventLocation, setCurrentEventLocation] = useState('');
-  const [currentEventName, setCurrentEventName] = useState('');
+  const [currentEventLocation, setCurrentEventLocation] = useState<string>('');
+  const [currentEventName, setCurrentEventName] = useState<string>('');
   const baseUrl = 'http://localhost:5000';
 
   async function loadGuests(shouldReturn = false, id: number) {

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import deleteLogo from './delete-button.svg';
 import { sidebarStyles } from './Styles';
 
@@ -44,15 +44,18 @@ const Sidebar: React.FC<IPropsSidebar> = ({
     setEventLocationOrNameMissingErr,
   ] = useState('');
 
-  async function loadEvents(shouldReturn: boolean = false) {
-    const response = await fetch(`${baseUrl}/events`);
-    const allEvents = await response.json();
+  const loadEvents = useCallback(
+    async (shouldReturn: boolean = false) => {
+      const response = await fetch(`${baseUrl}/events`);
+      const allEvents = await response.json();
 
-    setEventList(allEvents);
-    if (shouldReturn) {
-      return allEvents;
-    }
-  }
+      setEventList(allEvents);
+      if (shouldReturn) {
+        return allEvents;
+      }
+    },
+    [baseUrl],
+  );
 
   async function createEvent() {
     if (eventName && eventLocation) {
@@ -107,7 +110,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
 
   useEffect(() => {
     loadEvents();
-  }, []);
+  }, [loadEvents]);
 
   return (
     <div css={sidebarStyles}>
