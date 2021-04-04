@@ -68,17 +68,17 @@ const ListHeader: React.FC<IPropsListHeader> = ({
     }
   }
 
-  async function filter(filterid: string) {
-    if (filterid === 'all') {
+  async function filter(filterId: string) {
+    if (filterId === 'all') {
       setGuestList(await loadGuests(true, eventId));
-    } else if (filterid === 'attending') {
+    } else if (filterId === 'attending') {
       const onlyAttendingGuests = (await loadGuests(true, eventId)).filter(
         (element: IGuest) => {
           return element.attending;
         },
       );
       setGuestList(onlyAttendingGuests);
-    } else if (filterid === 'notAttending') {
+    } else if (filterId === 'notAttending') {
       const onlyAttendingGuests = (await loadGuests(true, eventId)).filter(
         (element: IGuest) => {
           return !element.attending;

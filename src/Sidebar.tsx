@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import deleteLogo from './delete-button.svg';
 import { sidebarStyles } from './Styles';
 
@@ -44,61 +44,69 @@ const Sidebar: React.FC<IPropsSidebar> = ({
     setEventLocationOrNameMissingErr,
   ] = useState('');
 
-  async function loadEvents(shouldReturn: boolean = false) {
-    const response = await fetch(`${baseUrl}/events`);
-    const allEvents = await response.json();
+  const loadEvents = useCallback(
+    async (shouldReturn: boolean = false) => {
+      const response = await fetch(`${baseUrl}/events`);
+      const allEvents = await response.json();
 
-    setEventList(allEvents);
-    if (shouldReturn) {
-      return allEvents;
-    }
-  }
+      setEventList(allEvents);
+      if (shouldReturn) {
+        return allEvents;
+      }
+    },
+    [baseUrl],
+  );
 
   async function createEvent() {
-    if (eventName && eventLocation) {
-      const response = await fetch(`${baseUrl}/newEvent`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          eventName: eventName,
-          eventLocation: eventLocation,
-        }),
-      });
-      const createdEvent = await response.json();
-      const eventListTemp = [...eventList, createdEvent];
-
-      setEventId(createdEvent.eventId);
-      setEventList(eventListTemp);
-      setCurrentEventName(createdEvent.eventName);
-      setCurrentEventLocation(createdEvent.eventLocation);
-      setEventName('');
-      setEventLocation('');
-      setEventLocationOrNameMissingErr('');
-      setGuestList([]);
-    } else {
-      if (!eventName) {
-        setEventLocationOrNameMissingErr('Event name not given.');
-      } else if (!eventLocation) {
-        setEventLocationOrNameMissingErr('Event location not given.');
-      }
+    let errMsg;
+    if (!eventName) {
+      errMsg = 'Event name not given.';
     }
+    if (!eventLocation) {
+      errMsg = errMsg
+        ? 'Event name and location not given.'
+        : 'Event location not given.';
+    }
+    if (errMsg) {
+      setEventLocationOrNameMissingErr(errMsg);
+      return;
+    }
+    const response = await fetch(`${baseUrl}/newEvent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventName: eventName,
+        eventLocation: eventLocation,
+      }),
+    });
+    const createdEvent = await response.json();
+    const eventListTemp = [...eventList, createdEvent];
+
+    setEventId(createdEvent.eventId);
+    setEventList(eventListTemp);
+    setCurrentEventName(createdEvent.eventName);
+    setCurrentEventLocation(createdEvent.eventLocation);
+    setEventName('');
+    setEventLocation('');
+    setEventLocationOrNameMissingErr('');
+    setGuestList([]);
   }
 
   async function deleteEvent(eventId: string) {
-    if (eventId) {
-      await fetch(`${baseUrl}/deleteEvent/${eventId}`, {
-        method: 'DELETE',
-      });
+    if (!eventId) return;
 
-      const updatedEventList = eventList.filter((element) => {
-        return !(element.eventId.toString() === eventId);
-      });
+    await fetch(`${baseUrl}/deleteEvent/${eventId}`, {
+      method: 'DELETE',
+    });
 
-      setEventList(updatedEventList);
-      setEventId(0);
-    }
+    const updatedEventList = eventList.filter((element) => {
+      return !(element.eventId.toString() === eventId);
+    });
+
+    setEventList(updatedEventList);
+    setEventId(0);
   }
 
   async function openGuestList(id: number) {
@@ -107,7 +115,7 @@ const Sidebar: React.FC<IPropsSidebar> = ({
 
   useEffect(() => {
     loadEvents();
-  }, []);
+  }, [loadEvents]);
 
   return (
     <div css={sidebarStyles}>
