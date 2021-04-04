@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# Event Manager 3000 .... if you order now
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project let's administer your events and the corresponding guest list. This react project is based on an express api which can be found here:
 
-## Available Scripts
+[Express server repo](uebriges/express-server-for-react-guestlist).
 
-In the project directory, you can run:
+## Functionality overview
 
-### `yarn start`
+- Creating new events
+- Deleting events
+- Adding new guests to an event
+- Edit first and last name of every guest
+- Delete a single guest
+- Mark a guest as attending
+- Delete all attending guests
+- Filter by attending/not attending
+- Setting an attending deadline
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Creating new events
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Before you can start you have to create at least one event in the Sidebar on the left side:<br/><br/>
 
-### `yarn test`
+![Start screen](./Screenshots/CreateEvent.png).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+As soon as you created an event, the event is shown in the sidebar below the functionality for creating new events. After creation the empty guest list of that event is shown. You can later also chose another event if you click on on the event in the sidebar. <br/><br/>
 
-### `yarn build`
+![New Event](./Screenshots/NewEvent.png).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In the event area you can find all the functionalities available. Those will be described in the following chapters.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Deleting events
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+You can delete events by simply clicking on he button with the x symbol right to the event button.
 
-### `yarn eject`
+![New Event](./Screenshots/DeleteEvent.png).
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Adding new guests to an event
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+You can add new guests by first filling out the first and last name input field in the guest list header of the event. You can either click the Add guest button or simply press Enter to create a new guest.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+![New Guest](./Screenshots/NewGuest.png).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Edit first and last name of every guest
 
-## Learn More
+By double clicking the first or the last name of a guest entry in the guest list, you can edit the names. After you edited the name simply press enter. The changes will be saved and the input field is not changeable anymore.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+For multiple changes simply repeat the instructions from above.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+![Change first and last name](./Screenshots/ChangeNames.png).
 
-### Code Splitting
+## Delete a single guest
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+By clicking on the delete button with the x symbol in the guest list, you can delete a single guest.
 
-### Analyzing the Bundle Size
+![Delete single guest](./Screenshots/DeleteGuest.png).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Mark a guest as attending
 
-### Making a Progressive Web App
+By cicking the checkbox in the column Attending, you can mark a single guest as attending.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![Attending checkbox](./Screenshots/Attending.png).
 
-### Advanced Configuration
+## Delete all attending guests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+All guests that are marked as attending, can be deleted at once by the "Wipe all attending guests" button.
 
-### Deployment
+![Delete attending guests](./Screenshots/DeleteAttendingGuests.png).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Filter by attending/not attending
 
-### `yarn build` fails to minify
+You can filter the list of guests of an event by clicking on one of the radio buttons in the guest list header on the right side.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![Filter guests](./Screenshots/Filter.png).
+
+## Setting an attending deadline
+
+You can set a guest an attendin deadline. For editing, you can again use double click. By setting a guests attending deadline for the same day or a date in the future, the attending checkbox will be checked automatically.
+
+If you chose a date in the past. The checkbox will be unchecked.
+
+![Set attending deadline](./Screenshots/AttendingDeadline.png)
