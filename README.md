@@ -6,15 +6,15 @@ This project let's administer your events and the corresponding guest list. This
 
 ## Functionality overview
 
-- Creating new events
-- Deleting events
-- Adding new guests to an event
-- Edit first and last name of every guest
-- Delete a single guest
-- Mark a guest as attending
-- Delete all attending guests
-- Filter by attending/not attending
-- Setting an attending deadline
+- Creating new events 🆕
+- Deleting events ❌
+- Adding new guests to an event 🚀
+- Edit first and last name of every guest 🍀
+- Delete a single guest ❌
+- Mark a guest as attending ✔
+- Delete all attending guests ❌
+- Filter by attending/not attending 🚳
+- Setting an attending deadline ⌚
 
 ## Creating new events
 
