@@ -20,11 +20,11 @@ This project let's administer your events and the corresponding guest list. This
 
 Before you can start you have to create at least one event in the Sidebar on the left side:<br/><br/>
 
-![Start screen](./Screenshots/CreateEvent.png).
+![Start screen](./public/Screenshots/CreateEvent.png).
 
 As soon as you created an event, the event is shown in the sidebar below the functionality for creating new events. After creation the empty guest list of that event is shown. You can later also chose another event if you click on on the event in the sidebar. <br/><br/>
 
-![New Event](./Screenshots/NewEvent.png).
+![New Event](./public/Screenshots/NewEvent.png).
 
 In the event area you can find all the functionalities available. Those will be described in the following chapters.
 
@@ -32,13 +32,13 @@ In the event area you can find all the functionalities available. Those will be 
 
 You can delete events by simply clicking on he button with the x symbol right to the event button.
 
-![New Event](./Screenshots/DeleteEvent.png).
+![New Event](./public/Screenshots/DeleteEvent.png).
 
 ## Adding new guests to an event
 
 You can add new guests by first filling out the first and last name input field in the guest list header of the event. You can either click the Add guest button or simply press Enter to create a new guest.
 
-![New Guest](./Screenshots/NewGuest.png).
+![New Guest](./public/Screenshots/NewGuest.png).
 
 ## Edit first and last name of every guest
 
@@ -46,31 +46,31 @@ By double clicking the first or the last name of a guest entry in the guest list
 
 For multiple changes simply repeat the instructions from above.
 
-![Change first and last name](./Screenshots/ChangeNames.png).
+![Change first and last name](./public/Screenshots/ChangeNames.png).
 
 ## Delete a single guest
 
 By clicking on the delete button with the x symbol in the guest list, you can delete a single guest.
 
-![Delete single guest](./Screenshots/DeleteGuest.png).
+![Delete single guest](./public/Screenshots/DeleteGuest.png).
 
 ## Mark a guest as attending
 
 By cicking the checkbox in the column Attending, you can mark a single guest as attending.
 
-![Attending checkbox](./Screenshots/Attending.png).
+![Attending checkbox](./public/Screenshots/Attending.png).
 
 ## Delete all attending guests
 
 All guests that are marked as attending, can be deleted at once by the "Wipe all attending guests" button.
 
-![Delete attending guests](./Screenshots/DeleteAttendingGuests.png).
+![Delete attending guests](./public/Screenshots/DeleteAttendingGuests.png).
 
 ## Filter by attending/not attending
 
 You can filter the list of guests of an event by clicking on one of the radio buttons in the guest list header on the right side.
 
-![Filter guests](./Screenshots/Filter.png).
+![Filter guests](./public/Screenshots/Filter.png).
 
 ## Setting an attending deadline
 
@@ -78,4 +78,4 @@ You can set a guest an attendin deadline. For editing, you can again use double 
 
 If you chose a date in the past. The checkbox will be unchecked.
 
-![Set attending deadline](./Screenshots/AttendingDeadline.png)
+![Set attending deadline](./public/Screenshots/AttendingDeadline.png)
